@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101519">
+    <title>Gesture lab · Safari vs Chrome pinch zoom</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">INTERACTION EXPERIMENT / SAFARI × CHROME</div>
+        <div class="heading"><h1>Gesture lab<span>.</span></h1><span class="badge" id="support" role="status">Checking support…</span></div>
+        <p class="intro">One pinch, two APIs. Compare Safari’s native gestures with Chrome’s wheel-based zoom.</p>
+      </header>
+
+      <div class="comparison">
+      <section class="method" aria-labelledby="native-title">
+      <div class="method-heading"><h2 id="native-title">01 / Safari</h2><code>GestureEvent</code></div>
+      <div class="workspace">
+        <section class="playground" aria-labelledby="surface-title">
+          <div class="surface-heading"><span id="surface-title">GESTURE SURFACE</span><span id="phase" role="status">Waiting for a gesture</span></div>
+          <div id="surface" class="gesture-surface" tabindex="0" aria-label="Gesture surface. Pinch or rotate with two fingers here.">
+            <div class="crosshair" aria-hidden="true"></div>
+            <div id="object" class="gesture-object" aria-hidden="true"><div class="object-mark">↗</div><span>PINCH + ROTATE</span><strong>G</strong><div class="object-bottom"><span>GESTURE<br>OBJECT</span><span>01</span></div></div>
+            <div class="surface-hint">Hover here with your pointer, then pinch or rotate on your trackpad.<br>On a touchscreen, use two fingers directly on this surface.</div>
+          </div>
+          <div class="surface-footer"><span>Object <strong id="object-scale">1.00×</strong> <span class="divider">/</span> <strong id="object-rotation">0.0°</strong></span><button id="reset" type="button">Reset object ↺</button></div>
+        </section>
+
+        <aside>
+          <section class="panel" aria-labelledby="values-title">
+            <h2 id="values-title">Live event values</h2>
+            <div class="metric"><div><label>event.scale</label><p>Relative to this gesture’s start</p></div><output id="scale">1.000×</output></div>
+            <div class="metric"><div><label>event.rotation</label><p>Clockwise is positive</p></div><output id="rotation">0.0°</output></div>
+            <div class="small-values"><span>Events received <strong id="count">0</strong></span><span>Trusted input <strong id="trusted">—</strong></span></div>
+          </section>
+          <section class="panel controls" aria-labelledby="behavior-title">
+            <h2 id="behavior-title">Browser behavior</h2>
+            <label class="checkbox"><input id="prevent-default" type="checkbox" checked><span>Prevent default on this surface</span></label>
+            <p>Cancel Safari’s default gesture behavior on this surface. Uncheck to compare with page zoom.</p>
+            <p id="cancellation">No gesture received yet.</p>
+          </section>
+          <section class="note"><span>DIRECT MEASUREMENTS</span><p>Scale is relative to gesturestart: zoom = startingZoom × event.scale. Rotation is supplied in degrees. Explicit start/change/end events define the gesture.</p><a href="https://developer.mozilla.org/en-US/docs/Web/API/GestureEvent" target="_blank" rel="noreferrer">GestureEvent reference ↗</a><p class="compatibility">A non-standard WebKit API. Open this column in Safari and pinch or rotate on a multitouch trackpad. Its listener receives no wheel fallback.</p></section>
+        </aside>
+      </div>
+      </section>
+
+      <section class="method wheel-method" aria-labelledby="wheel-title">
+        <div class="method-heading"><h2 id="wheel-title">02 / Chrome</h2><code>WheelEvent + ctrlKey</code></div>
+        <div class="workspace">
+          <section class="playground" aria-labelledby="wheel-surface-title">
+            <div class="surface-heading"><span id="wheel-surface-title">WHEEL PINCH SURFACE</span><span id="wheel-phase" role="status">Waiting for a pinch</span></div>
+            <div id="wheel-surface" class="gesture-surface" tabindex="0" aria-label="Chrome wheel pinch surface. Pinch here with a trackpad, or use Control plus mouse wheel.">
+              <div class="crosshair" aria-hidden="true"></div>
+              <div id="wheel-object" class="gesture-object" aria-hidden="true"><div class="object-mark">↗</div><span>PINCH TO ZOOM</span><strong>W</strong><div class="object-bottom"><span>WHEEL<br>OBJECT</span><span>02</span></div></div>
+              <div class="surface-hint">In Chrome, hover here and pinch on your trackpad.<br>Control + mouse wheel also uses this path.</div>
+            </div>
+            <div class="surface-footer"><span>Object <strong id="wheel-object-scale">1.00×</strong> <span class="divider">/</span> rotation unavailable</span><button id="wheel-reset" type="button">Reset object ↺</button></div>
+          </section>
+          <aside>
+            <section class="panel" aria-labelledby="wheel-values-title">
+              <h2 id="wheel-values-title">Live wheel values</h2>
+              <div class="metric"><div><label>event.deltaY</label><p id="wheel-mode">deltaMode: —</p></div><output id="wheel-delta">0.000</output></div>
+              <div class="metric"><div><label>Computed step</label><p id="wheel-pixels">Normalized delta: 0 px</p></div><output id="wheel-step">1.000×</output></div>
+              <div class="small-values"><span>ctrlKey <strong id="wheel-ctrl">—</strong></span><span>Trusted input <strong id="wheel-trusted">—</strong></span></div>
+              <div class="small-values"><span>Pinch / Ctrl+wheel <strong id="wheel-count">0</strong></span><span>Scroll ignored <strong id="wheel-ignored">0</strong></span></div>
+            </section>
+            <section class="panel controls" aria-labelledby="wheel-behavior-title">
+              <h2 id="wheel-behavior-title">Browser behavior</h2>
+              <label class="checkbox"><input id="wheel-prevent-default" type="checkbox" checked><span>Prevent default for Ctrl+wheel</span></label>
+              <p>Cancel page zoom for pinch-like wheel events here. Ordinary scrolling is neither canceled nor applied to the object.</p>
+              <label class="sensitivity" for="wheel-sensitivity">Zoom sensitivity <output id="wheel-sensitivity-value">0.010</output></label>
+              <input id="wheel-sensitivity" type="range" min="0.002" max="0.030" step="0.001" value="0.010">
+              <p id="wheel-cancellation">No wheel event received yet.</p>
+            </section>
+            <section class="note"><span>COMPUTED ZOOM</span><p>step = exp(−pixelDelta × sensitivity). Each wheel event multiplies the current zoom by that step. Both objects zoom around their center and use the same 0.2–4× limits.</p><p>No rotation or native pinch start/end is available from wheel. “Idle” is inferred after 160 ms without a pinch event. ctrlKey also matches a real Control key plus wheel; it cannot identify the physical input by itself.</p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/wheel_event" target="_blank" rel="noreferrer">Wheel event reference ↗</a><p class="compatibility">Pixel deltas are used directly. Line deltas use a demo convention of 16 px per line; page deltas use the surface height. Sensitivity is adjustable, so this is not a claim of identical browser zoom speed.</p></section>
+          </aside>
+        </div>
+      </section>
+      </div>
+
+      <section class="panel event-panel" aria-labelledby="log-title">
+        <div class="log-heading"><h2 id="log-title">Event stream <span>Latest 60 events · newest first</span></h2><button id="clear" type="button">Clear log</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Time</th><th>API / Event</th><th>Raw input</th><th>Object zoom</th><th>Cancelable</th><th>Prevented</th></tr></thead><tbody id="events"><tr id="empty"><td colspan="6">Your gestures will appear here.</td></tr></tbody></table></div>
+      </section>
+      <footer>GESTUREEVENT × WHEELEVENT <span>Separate surfaces. No gesture libraries.</span></footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "gesture-event-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
+    "start": "node server.mjs",
+    "check": "node --check app.js && node --check server.mjs && node --test app.test.mjs"
+  }
+}
